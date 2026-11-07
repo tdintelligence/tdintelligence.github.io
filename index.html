@@ -3,123 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name — Personal Site</title>
+    <title>Tony Dang — Personal Site</title>
     <style>
         /* ── Reset & Base ── */
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg:        #0e0e10;
-            --surface:   #18181b;
-            --border:    #27272a;
-            --text:      #e4e4e7;
-            --muted:     #a1a1aa;
-            --accent:    #6d28d9;
-            --accent-h:  #7c3aed;
-            --radius:    12px;
+            --white:      #fbfbfd;
+            --off-white:  #f5f5f7;
+            --text:       #1d1d1f;
+            --muted:      #6e6e73;
+            --blue:       #0071e3;
+            --blue-h:     #0077ed;
         }
 
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Icons',
+                         'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+            background: var(--white);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 1.47059;
+            font-size: 17px;
+            letter-spacing: -0.022em;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        a { color: var(--accent-h); text-decoration: none; }
-        a:hover { text-decoration: underline; }
+        h1, h2, h3 { letter-spacing: -0.015em; }
+        h1 { font-size: 56px; line-height: 1.07143; font-weight: 700; }
+        h2 { font-size: 40px; line-height: 1.1; font-weight: 600; }
+        h3 { font-size: 24px; line-height: 1.16667; font-weight: 600; }
+        p  { font-size: 19px; line-height: 1.4211; color: var(--muted); }
 
-        img { max-width: 100%; border-radius: var(--radius); }
+        a { color: var(--blue); text-decoration: none; transition: color .2s ease; }
+        a:hover { color: var(--blue-h); text-decoration: underline; }
+        img { max-width: 100%; display: block; }
 
-        /* ── Layout ── */
-        .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
-
-        /* ── Navbar ── */
+        /* ── Navbar — Apple style ── */
         nav {
-            position: sticky; top: 0; z-index: 100;
-            background: rgba(14,14,16,.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(251,251,253,.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 0.5px solid rgba(0,0,0,.08);
         }
         nav .container {
+            max-width: 1024px; margin: 0 auto;
             display: flex; align-items: center; justify-content: space-between;
-            height: 64px;
+            height: 48px; padding: 0 22px;
         }
-        nav .logo { font-weight: 700; font-size: 1.15rem; }
-        nav ul { list-style: none; display: flex; gap: 24px; }
-        nav ul li a { color: var(--muted); font-size: .9rem; transition: color .2s; }
+        nav .logo { font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+        nav ul { list-style: none; display: flex; gap: 28px; }
+        nav ul li a { color: var(--muted); font-size: 12px; font-weight: 400; letter-spacing: -0.01em; transition: color .2s ease; }
         nav ul li a:hover { color: var(--text); text-decoration: none; }
 
-        /* ── Hero ── */
+        /* ── Layout ── */
+        .container { max-width: 980px; margin: 0 auto; padding: 0 22px; }
+        .bg-off { background: var(--off-white); }
+
+        section {
+            padding: 120px 0;
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(.25,.1,.25,1),
+                        transform 0.8s cubic-bezier(.25,.1,.25,1);
+        }
+        section.visible { opacity: 1; transform: translateY(0); }
+        section h2 { text-align: center; margin-bottom: 60px; }
+        section p.section-intro { text-align: center; max-width: 600px; margin: 0 auto 60px; }
+
+        /* ── Hero with background image ── */
         .hero {
-            display: flex; flex-direction: column; align-items: center;
-            text-align: center; padding: 100px 24px 60px;
+            position: relative; min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 0 22px;
         }
-        .avatar {
-            width: 130px; height: 130px; border-radius: 50%;
-            background: var(--surface); border: 3px solid var(--border);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 3rem; margin-bottom: 28px;
+        .hero .hero-bg {
+            position: absolute; inset: 0;
+            background: url('images/hero-1.png') center/cover no-repeat;
+            z-index: 0;
         }
-        .hero h1 { font-size: 2.4rem; margin-bottom: 12px; }
-        .hero p  { color: var(--muted); max-width: 520px; font-size: 1.05rem; }
-        .hero .badge {
-            display: inline-block; margin-top: 24px;
-            background: var(--accent); color: #fff;
-            padding: 8px 20px; border-radius: 999px;
-            font-size: .85rem; font-weight: 600;
+        .hero .hero-overlay {
+            position: absolute; inset: 0;
+            background: rgba(251,251,253,.55); z-index: 1;
+        }
+        .hero > * { position: relative; z-index: 2; }
+        .hero .eyebrow { font-size: 17px; color: var(--muted); font-weight: 400; margin-bottom: 12px; letter-spacing: -0.01em; }
+        .hero h1 {
+            background: linear-gradient(135deg, #1d1d1f 0%, #424245 50%, #1d1d1f 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            margin-bottom: 20px;
+        }
+        .hero p { max-width: 600px; font-size: 21px; line-height: 1.38; margin-bottom: 36px; }
+        .hero .cta-group { display: flex; gap: 24px; align-items: center; }
+        .hero .cta-btn {
+            display: inline-flex; align-items: center; background: var(--blue); color: #fff;
+            padding: 12px 28px; border-radius: 980px; font-size: 17px; font-weight: 500;
+            letter-spacing: -0.01em; transition: background .2s ease;
+        }
+        .hero .cta-btn:hover { background: var(--blue-h); text-decoration: none; }
+        .hero .cta-link { font-size: 21px; font-weight: 500; color: var(--blue); }
+        .hero .cta-link::after { content: ' ›'; }
+        .scroll-hint {
+            position: absolute; bottom: 40px; z-index: 2;
+            animation: float 2.4s ease-in-out infinite; color: var(--muted); font-size: 28px;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
+        /* ── Image showcase (full-width) ── */
+        .showcase { width: 100%; overflow: hidden; }
+        .showcase img { width: 100%; display: block; }
+
+        /* ── Decorative divider ── */
+        .divider {
+            width: 100%; height: 180px; overflow: hidden; position: relative;
+        }
+        .divider .divider-img {
+            width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;
         }
 
-        /* ── Sections ── */
-        section { padding: 64px 0; }
-        section h2 { font-size: 1.6rem; margin-bottom: 28px; }
+        /* ── About ── */
+        #about { padding: 140px 0; }
+        #about .about-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+        #about p { font-size: 21px; line-height: 1.5; }
 
-        /* ── Cards Grid ── */
+        /* ── Project cards ── */
         .grid {
             display: grid; gap: 20px;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         }
         .card {
-            background: var(--surface); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 24px;
-            transition: border-color .25s;
+            background: var(--off-white); border-radius: 24px; padding: 44px 40px;
+            transition: transform .35s cubic-bezier(.25,.1,.25,1), box-shadow .35s ease;
         }
-        .card:hover { border-color: var(--accent); }
-        .card h3 { margin-bottom: 8px; }
-        .card p  { color: var(--muted); font-size: .92rem; }
+        .card:hover { transform: scale(1.02); box-shadow: 0 20px 60px rgba(0,0,0,.06); }
+        .card .card-label { font-size: 12px; color: var(--muted); font-weight: 500; letter-spacing: -0.01em; margin-bottom: 8px; text-transform: uppercase; }
+        .card h3 { margin-bottom: 10px; }
+        .card p { font-size: 17px; line-height: 1.5; }
 
-        /* ── Tech Stack ── */
-        .tags { display: flex; flex-wrap: wrap; gap: 10px; }
+        /* ── Skills — tag row ── */
+        .tags { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
         .tag {
-            background: var(--surface); border: 1px solid var(--border);
-            padding: 6px 14px; border-radius: 999px; font-size: .82rem;
+            display: inline-flex; background: var(--off-white);
+            padding: 8px 18px; border-radius: 980px;
+            font-size: 15px; color: var(--text); font-weight: 500;
         }
 
         /* ── Contact ── */
-        .contact-links { display: flex; gap: 16px; flex-wrap: wrap; }
+        #contact { padding: 100px 0 140px; }
+        #contact p { text-align: center; max-width: 560px; margin: 0 auto 40px; }
+        .contact-links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
         .btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: var(--accent); color: #fff;
-            padding: 12px 24px; border-radius: var(--radius);
-            font-weight: 600; font-size: .9rem;
-            transition: background .2s;
+            display: inline-flex; align-items: center; background: var(--blue); color: #fff;
+            padding: 14px 32px; border-radius: 980px; font-size: 17px; font-weight: 500;
+            letter-spacing: -0.01em; transition: background .2s ease;
         }
-        .btn:hover { background: var(--accent-h); text-decoration: none; }
+        .btn:hover { background: var(--blue-h); text-decoration: none; }
 
         /* ── Footer ── */
         footer {
-            text-align: center; padding: 40px 24px;
-            color: var(--muted); font-size: .8rem;
-            border-top: 1px solid var(--border);
+            text-align: center; padding: 36px 22px; color: var(--muted);
+            font-size: 12px; background: var(--off-white);
         }
+        footer a { color: var(--muted); }
 
         /* ── Responsive ── */
-        @media (max-width: 600px) {
-            .hero h1 { font-size: 1.8rem; }
-            nav ul { gap: 14px; }
+        @media (max-width: 734px) {
+            h1 { font-size: 40px; }
+            h2 { font-size: 32px; }
+            p  { font-size: 17px; }
+            section { padding: 80px 0; }
+            nav ul { gap: 18px; }
+            .hero p, .hero .cta-btn, .hero .cta-link { font-size: 17px; }
+            .grid { grid-template-columns: 1fr; }
+            .card { padding: 32px 28px; }
+            .divider { height: 120px; }
         }
     </style>
 </head>
@@ -128,7 +192,7 @@
 <!-- ── Navbar ── -->
 <nav>
     <div class="container">
-        <span class="logo">YourName</span>
+        <span class="logo">Tony Dang</span>
         <ul>
             <li><a href="#about">About</a></li>
             <li><a href="#projects">Projects</a></li>
@@ -138,47 +202,77 @@
     </div>
 </nav>
 
-<!-- ── Hero ── -->
+<!-- ── Hero with abstract blue background ── -->
 <header class="hero">
-    <div class="avatar">👤</div>
-    <h1>Hi, I'm Your Name</h1>
-    <p>
-        A short tagline about what you do — e.g. "Full-stack developer building
-        things for the web."
-    </p>
-    <span class="badge">Open to work</span>
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <p class="eyebrow">Hello, I'm</p>
+    <h1>Tony Dang.</h1>
+    <p>Developer crafting clean digital experiences.</p>
+    <div class="cta-group">
+        <a class="cta-btn" href="#projects">View my work</a>
+        <a class="cta-link" href="#contact">Get in touch</a>
+    </div>
+    <span class="scroll-hint">⌄</span>
 </header>
 
+<!-- ── Full-width showcase: clean workspace ── -->
+<div class="showcase">
+    <img src="images/hero-2.png" alt="Clean workspace with laptop and coffee" loading="lazy">
+</div>
+
 <!-- ── About ── -->
-<section id="about" class="container">
-    <h2>About</h2>
-    <p style="color:var(--muted); max-width:680px;">
-        Write a paragraph or two about yourself here. Where you're from, what
-        drives you, and what you're working on. This is your elevator pitch.
-    </p>
+<section id="about">
+    <div class="about-inner">
+        <p>
+            I'm a developer passionate about building thoughtful, 
+            well-crafted software. Based in Australia, I focus on 
+            creating clean, performant experiences that make a 
+            real difference.
+        </p>
+    </div>
 </section>
 
+<!-- ── Decorative divider: network nodes ── -->
+<div class="divider">
+    <img class="divider-img" src="images/hero-3.png" alt="" loading="lazy">
+</div>
+
+<!-- ── Full-width showcase: 3D pastel shapes ── -->
+<div class="showcase">
+    <img src="images/hero-4.png" alt="3D geometric shapes" loading="lazy">
+</div>
+
 <!-- ── Projects ── -->
-<section id="projects" class="container">
+<section id="projects" class="bg-off">
     <h2>Projects</h2>
+    <p class="section-intro">A selection of things I've built.</p>
     <div class="grid">
         <div class="card">
+            <span class="card-label">Project</span>
             <h3>Project One</h3>
             <p>Brief description of the project and the problem it solves.</p>
         </div>
         <div class="card">
+            <span class="card-label">Project</span>
             <h3>Project Two</h3>
             <p>Brief description of the project and the problem it solves.</p>
         </div>
         <div class="card">
+            <span class="card-label">Project</span>
             <h3>Project Three</h3>
             <p>Brief description of the project and the problem it solves.</p>
         </div>
     </div>
 </section>
 
+<!-- ── Decorative divider: purple waves ── -->
+<div class="divider">
+    <img class="divider-img" src="images/hero-5.png" alt="" loading="lazy">
+</div>
+
 <!-- ── Skills ── -->
-<section id="skills" class="container">
+<section id="skills">
     <h2>Skills</h2>
     <div class="tags">
         <span class="tag">HTML / CSS</span>
@@ -187,27 +281,37 @@
         <span class="tag">React</span>
         <span class="tag">Node.js</span>
         <span class="tag">Git</span>
-        <span class="tag" style="color:var(--accent-h)">Add your own</span>
     </div>
 </section>
 
 <!-- ── Contact ── -->
-<section id="contact" class="container">
+<section id="contact" class="bg-off">
     <h2>Contact</h2>
-    <p style="color:var(--muted); margin-bottom:20px;">
-        Feel free to reach out — I'm always happy to connect.
-    </p>
+    <p>Feel free to reach out — I'm always happy to connect.</p>
     <div class="contact-links">
-        <a class="btn" href="mailto:you@email.com">✉️  Email</a>
-        <a class="btn" href="https://github.com/yourusername" target="_blank">🐙  GitHub</a>
-        <a class="btn" href="https://linkedin.com/in/yourusername" target="_blank">💼  LinkedIn</a>
+        <a class="btn" href="mailto:you@email.com">Email</a>
+        <a class="btn" href="https://github.com/tdintelligence" target="_blank">GitHub</a>
+        <a class="btn" href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a>
     </div>
 </section>
 
 <!-- ── Footer ── -->
 <footer>
-    <p>© 2026 Your Name. Built with ♥</p>
+    <p>© 2026 Tony Dang. All rights reserved.</p>
 </footer>
+
+<script>
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        },
+        { threshold: 0.15 }
+    );
+    sections.forEach(s => observer.observe(s));
+</script>
 
 </body>
 </html>
