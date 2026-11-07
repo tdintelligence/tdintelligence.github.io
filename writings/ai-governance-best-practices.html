@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Governance Best Practices — Tony Dang</title>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --white:      #fbfbfd;
+            --off-white:  #f5f5f7;
+            --black:      #1d1d1f;
+            --muted:      #6e6e73;
+            --blue:       #0071e3;
+            --blue-h:     #0077ed;
+        }
+
+        html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Icons',
+                         'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.5;
+            font-size: 17px;
+            letter-spacing: -0.022em;
+        }
+
+        h1 { font-size: 44px; line-height: 1.09; font-weight: 700; letter-spacing: -0.015em; }
+        h2 { font-size: 32px; line-height: 1.125; font-weight: 600; letter-spacing: -0.015em; }
+        h3 { font-size: 24px; line-height: 1.167; font-weight: 600; }
+        p  { font-size: 17px; line-height: 1.588; color: var(--black); }
+        a  { color: var(--blue); text-decoration: none; }
+
+        /* ── Navbar ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(251,251,253,.85);
+            backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 0.5px solid rgba(0,0,0,.06);
+        }
+        nav .container {
+            max-width: 980px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 48px; padding: 0 22px;
+        }
+        nav .logo { font-size: 18px; font-weight: 600; color: var(--black); }
+        nav .back-link { font-size: 12px; color: var(--muted); font-weight: 500; }
+
+        .container { max-width: 680px; margin: 0 auto; padding: 0 22px; }
+
+        /* ── Article Header ── */
+        .article-header {
+            padding-top: 80px; padding-bottom: 20px;
+            text-align: center;
+        }
+        .article-date {
+            font-size: 13px; color: var(--muted); font-weight: 500;
+            margin-bottom: 12px; text-transform: uppercase; letter-spacing: .03em;
+        }
+        .article-header h1 {
+            max-width: 600px; margin: 0 auto 16px;
+        }
+        .article-eyebrow {
+            max-width: 520px; font-size: 19px; line-height: 1.47;
+            color: var(--muted); margin: 0 auto 40px;
+        }
+        .article-cover {
+            max-width: 980px; margin: 0 auto 48px;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        .article-cover img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ── Article Body ── */
+        .article-body { max-width: 680px; margin: 0 auto; padding: 0 22px 80px; }
+        .article-body p { margin-bottom: 24px; }
+        .article-body h2 { margin-top: 48px; margin-bottom: 16px; }
+        .article-body h3 { margin-top: 32px; margin-bottom: 12px; font-size: 20px; }
+
+        .article-body ul, .article-body ol {
+            margin-bottom: 24px; padding-left: 24px;
+        }
+        .article-body li {
+            font-size: 17px; line-height: 1.588; color: var(--black);
+            margin-bottom: 12px;
+        }
+        .article-body li::marker { color: var(--blue); }
+
+        .pullquote {
+            border-left: 3px solid var(--blue);
+            padding: 20px 24px; margin: 40px 0;
+            background: var(--off-white);
+            border-radius: 0 12px 12px 0;
+        }
+        .pullquote p {
+            font-size: 19px; line-height: 1.5;
+            color: var(--black); font-weight: 500;
+            font-style: italic;
+        }
+
+        .key-points {
+            background: var(--off-white);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 32px 0;
+        }
+        .key-points h3 {
+            margin-top: 0;
+            font-size: 17px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+        .key-points ul { margin-bottom: 0; }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 24px 0;
+        }
+        .stat-box {
+            background: var(--off-white);
+            border-radius: 16px;
+            padding: 28px;
+            text-align: center;
+        }
+        .stat-box .stat-number {
+            font-size: 48px; font-weight: 700;
+            color: var(--blue);
+            letter-spacing: -0.02em;
+        }
+        .stat-box .stat-label {
+            font-size: 14px; color: var(--muted);
+            margin-top: 4px; line-height: 1.4;
+        }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center; padding: 32px 22px; color: var(--muted);
+            font-size: 12px;
+        }
+
+        @media (max-width: 734px) {
+            h1 { font-size: 32px; }
+            h2 { font-size: 26px; }
+            .two-col { grid-template-columns: 1fr; }
+            .stat-box .stat-number { font-size: 36px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="container">
+        <a href="../index.html" class="logo">Tony Dang</a>
+        <a href="../index.html#writings" class="back-link">← All writings</a>
+    </div>
+</nav>
+
+<!-- ── Article Header ── -->
+<div class="article-header">
+    <div class="container">
+        <p class="article-date">November 2026</p>
+        <h1>AI Governance Best Practices: What It Actually Takes</h1>
+        <p class="article-eyebrow">
+            Governance isn't a policy document. It's the operating system that lets organisations
+            use AI confidently, responsibly, and at scale.
+        </p>
+    </div>
+</div>
+
+<div class="article-cover">
+    <img src="../images/article-governance.png" alt="AI governance" loading="lazy">
+</div>
+
+<!-- ── Article Body ── -->
+<div class="article-body">
+
+    <p>
+        Every leader in AI today is grappling with the same question:
+        <em>How do we govern AI without killing innovation?</em>
+    </p>
+
+    <p>
+        The answer, drawn from frameworks published by the OECD, NIST, BSA, and real-world
+        practice across financial institutions, is that successful AI governance is not about
+        restriction. It's about creating clarity — so teams can move fast with confidence.
+    </p>
+
+    <h2>What Is AI Governance, Really?</h2>
+
+    <p>
+        AI governance is the combination of principles, policies, processes, and tools that an
+        organisation puts in place to manage risk across the entire AI lifecycle — from the moment
+        a use case is conceived to the point where a model is retired.
+    </p>
+
+    <p>
+        It covers five core areas: <strong>privacy and security</strong>,
+        <strong>reliability and safety</strong>, <strong>fairness</strong>,
+        <strong>inclusiveness</strong>, and <strong>transparency</strong>.
+        These are sometimes called Responsible AI principles, but they are really just good
+        risk management — adapted for a technology that learns, adapts, and sometimes surprises us.
+    </p>
+
+    <div class="pullquote">
+        <p>
+            "AI governance is designed to tackle confusion about how technology works,
+            the introduction of bias, the spread of misinformation, and privacy violations.
+            It encompasses principles, laws, policies, frameworks, and best practices
+            across the entire lifecycle."
+        </p>
+    </div>
+
+    <h2>The 5 Best Practices</h2>
+
+    <p>
+        Drawing from BSA's industry framework, IAPP's governance survey, Microsoft's Cloud
+        Adoption Framework, and the NIST AI Risk Management Framework, here are the five
+        practices that consistently separate successful programmes from those that stall:
+    </p>
+
+    <h3>1. Leadership Accountability — Start at the Top</h3>
+
+    <p>
+        The single biggest predictor of a successful AI governance programme is active
+        engagement from the C-suite. Without CEO commitment, governance becomes a compliance
+        exercise — something checked once and forgotten.
+    </p>
+
+    <p>What successful organisations do differently:</p>
+
+    <ul>
+        <li>Appoint a senior sponsor (often the CEO or CTO) who champions responsible AI publicly and internally.</li>
+        <li>Create a cross-functional AI governance committee with reps from engineering, product, legal, compliance, HR, and business units.</li>
+        <li>Establish clear escalation paths: anyone in the organisation can flag an AI ethics concern, and it gets reviewed by the committee.</li>
+        <li>Review and update governance policies regularly — technology and regulation move faster than any document stays current.</li>
+    </ul>
+
+    <p>
+        The 2025 IAPP survey found that organisations where senior managers actively oversee AI
+        governance report <strong>fewer AI-related issues</strong> and produce better governance
+        reporting than those without.
+    </p>
+
+    <h3>2. Embed Governance Across the AI Lifecycle</h3>
+
+    <p>
+        Governance cannot be a checkpoint at the end. It must be woven into every phase:
+    </p>
+
+    <ul>
+        <li><strong>Planning:</strong> Define objectives, document compliance requirements, and identify risk appetite before writing a single line of code.</li>
+        <li><strong>Design:</strong> Gather data, assess data quality, document metadata, and check for regulatory requirements in the datasets you intend to use.</li>
+        <li><strong>Development:</strong> Select algorithms carefully, train with care, test rigorously, calibrate outputs, and interpret results.</li>
+        <li><strong>Deployment:</strong> Pilot with caution, verify compliance, monitor performance in production, and have a plan to mitigate risks after launch.</li>
+        <li><strong>Decommissioning:</strong> Plan how to safely retire models — this phase is often overlooked but critical for managing data and legal risk.</li>
+    </ul>
+
+    <p>
+        The NIST AI Risk Management Framework maps these phases precisely and is now the
+        most widely adopted standard globally. Aligning your programme with it is not optional
+        if you operate internationally.
+    </p>
+
+    <h3>3. Invest in People and Engineering</h3>
+
+    <p>
+        Governance fails when it is a paperwork exercise without technical teeth. Successful
+        programmes invest in both:
+    </p>
+
+    <div class="two-col">
+        <div class="stat-box">
+            <div class="stat-number">77%</div>
+            <div class="stat-label">of surveyed organisations are actively building AI governance programmes</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">90%</div>
+            <div class="stat-label">of those already using AI have governance in place or under way</div>
+        </div>
+    </div>
+
+    <ul>
+        <li><strong>People:</strong> Hire dedicated AI governance roles. Upskill engineers and product managers. Train "AI champions" across the organisation who can translate governance principles into day-to-day decisions.</li>
+        <li><strong>Engineering:</strong> Build the technical capacity to enforce policies. That means testing frameworks, bias detection tools, monitoring dashboards, and the authority to modify or decommission systems when unacceptable risks are identified.</li>
+    </ul>
+
+    <h3>4. Be Transparent — Plainly and Publicly</h3>
+
+    <p>
+        Transparency is not about publishing everything. It's about publishing the right
+        things for the right audience:
+    </p>
+
+    <ul>
+        <li><strong>Consumers:</strong> Clear, simple explanations of when and how AI is being used to make decisions that affect them.</li>
+        <li><strong>Regulators:</strong> Documentation of compliance with applicable laws and frameworks.</li>
+        <li><strong>Internal teams:</strong> Model cards, system cards, and transparency notes that describe model capabilities, limitations, and intended use cases.</li>
+        <li><strong>Partners and vendors:</strong> Sufficient documentation so anyone in your supply chain can perform their own impact assessments.</li>
+    </ul>
+
+    <p>
+        The BSA recommends using plain language. Avoid jargon. A stakeholder who doesn't
+        understand the governance documentation is a risk you haven't managed.
+    </p>
+
+    <h3>5. Manage Risk — Proactively and Continuously</h3>
+
+    <p>
+        Risk management is the engine of governance. It requires a structured approach:
+    </p>
+
+    <ul>
+        <li><strong>Classify risk by severity.</strong> Not all AI systems carry the same risk. A customer service chatbot and a loan-approval model require different levels of scrutiny. Scale your controls to the risk profile.</li>
+        <li><strong>Conduct AI Impact Assessments.</strong> For high-risk systems, document intended use, benefits, risks, level of human oversight, and evaluation measures before deployment.</li>
+        <li><strong>Monitor post-deployment.</strong> Models degrade. Data drifts. User behaviour changes. Continuous monitoring catches issues before they become incidents.</li>
+        <li><strong>Include third-party risk.</strong> External data sources, pre-trained models, and vendor APIs introduce risk vectors that are easy to overlook but hard to recover from.</li>
+    </ul>
+
+    <div class="key-points">
+        <h3>Key Takeaway</h3>
+        <ul>
+            <li>Scale controls to the risk — not all AI systems need the same governance rigor.</li>
+            <li>Assess impact <em>before</em> deployment, not after.</li>
+            <li>Monitor continuously — a model's performance today does not guarantee tomorrow.</li>
+            <li>Include your supply chain — third-party risk is still your risk.</li>
+        </ul>
+    </div>
+
+    <h2>What Does Success Look Like?</h2>
+
+    <p>
+        This is the question most organisations struggle with. How do you know your AI
+        governance programme is working? Here are the signals:
+    </p>
+
+    <ul>
+        <li><strong>Speed.</strong> AI projects move through review and approval faster over time, not slower. Governance enables, not blocks.</li>
+        <li><strong>Fewer incidents.</strong> Bias complaints, compliance violations, model failures, and data breaches decrease as governance matures.</li>
+        <li><strong>Confidence.</strong> Senior leadership can answer "what could go wrong" for any AI system in the portfolio — without a long preparation time.</li>
+        <li><strong>Awareness.</strong> Employees across engineering, product, and business units understand the AI governance principles and apply them without being prompted.</li>
+        <li><strong>Adaptability.</strong> The programme evolves as technology and regulation change. It is not a static document sitting on a shelf.</li>
+        <li><strong>Trust.</strong> Customers, regulators, and partners trust your AI systems. This is the ultimate measure of success.</li>
+    </ul>
+
+    <div class="pullquote">
+        <p>
+            A mature AI governance programme doesn't slow innovation down. It makes innovation
+            sustainable — because the organisation knows its risk, has prepared for the worst,
+            and can move forward with confidence.
+        </p>
+    </div>
+
+    <h2>Getting Started — A Practical Checklist</h2>
+
+    <p>
+        If you're starting from zero, here is a practical path forward:
+    </p>
+
+    <ul>
+        <li><strong>Week 1–2:</strong> Secure executive sponsorship. Without this, nothing else matters.</li>
+        <li><strong>Week 3–4:</strong> Inventory all AI systems currently in use — even the ones nobody calls "AI" (recommendation engines, chatbots, fraud detection, etc.).</li>
+        <li><strong>Month 2:</strong> Classify each system by risk level using a framework like NIST AI RMF.</li>
+        <li><strong>Month 3:</strong> Establish your cross-functional governance committee and define clear roles.</li>
+        <li><strong>Month 4:</strong> Launch AI Impact Assessments for high-risk systems. Use this as the template for future deployments.</li>
+        <li><strong>Month 5–6:</strong> Roll out training across engineering and product teams. Appoint AI champions in each business unit.</li>
+        <li><strong>Month 6+: </strong> Implement continuous monitoring for deployed systems and schedule quarterly risk reviews.</li>
+    </ul>
+
+    <p>
+        The 2025 IAPP survey revealed an interesting trend: 30% of organisations not yet using
+        AI are already building governance programmes. They understand that governance
+        <em>before</em> adoption is easier — and cheaper — than governance after a crisis.
+    </p>
+
+    <h2>Final Thought</h2>
+
+    <p>
+        AI governance is not a function of compliance. It is a function of leadership.
+        Organisations that treat it as a competitive advantage — one that builds trust,
+        attracts talent, and earns customer confidence — will be the ones that lead
+        the next decade of AI adoption.
+    </p>
+
+    <p style="color:var(--muted);">
+        <em>— Tony Dang</em>
+    </p>
+
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+    <p>© 2026 Tony Dang. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
