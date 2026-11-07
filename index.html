@@ -3,81 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tony Dang — Personal Site</title>
+    <title>Tony Dang — AI & Data Risk Leader</title>
     <style>
-        /* ── Reset & Base ── */
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --white:      #fbfbfd;
             --off-white:  #f5f5f7;
-            --text:       #1d1d1f;
+            --black:      #1d1d1f;
             --muted:      #6e6e73;
             --blue:       #0071e3;
             --blue-h:     #0077ed;
         }
 
-        html {
-            scroll-behavior: smooth;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+        html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Icons',
                          'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
             background: var(--white);
-            color: var(--text);
+            color: var(--black);
             line-height: 1.47059;
             font-size: 17px;
             letter-spacing: -0.022em;
-            min-height: 100vh;
             overflow-x: hidden;
         }
 
         h1, h2, h3 { letter-spacing: -0.015em; }
         h1 { font-size: 56px; line-height: 1.07143; font-weight: 700; }
         h2 { font-size: 40px; line-height: 1.1; font-weight: 600; }
-        h3 { font-size: 24px; line-height: 1.16667; font-weight: 600; }
-        p  { font-size: 19px; line-height: 1.4211; color: var(--muted); }
-
-        a { color: var(--blue); text-decoration: none; transition: color .2s ease; }
-        a:hover { color: var(--blue-h); text-decoration: underline; }
+        h3 { font-size: 28px; line-height: 1.15; font-weight: 600; }
+        p  { font-size: 19px; line-height: 1.47059; color: var(--muted); }
+        a  { color: var(--blue); text-decoration: none; }
         img { max-width: 100%; display: block; }
 
-        /* ── Navbar — Apple style ── */
+        /* ── Navbar ── */
         nav {
             position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            background: rgba(251,251,253,.8);
+            background: rgba(251,251,253,.85);
             backdrop-filter: saturate(180%) blur(20px);
             -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border-bottom: 0.5px solid rgba(0,0,0,.08);
+            border-bottom: 0.5px solid rgba(0,0,0,.06);
         }
         nav .container {
-            max-width: 1024px; margin: 0 auto;
+            max-width: 980px; margin: 0 auto;
             display: flex; align-items: center; justify-content: space-between;
             height: 48px; padding: 0 22px;
         }
-        nav .logo { font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+        nav .logo { font-size: 18px; font-weight: 600; color: var(--black); }
         nav ul { list-style: none; display: flex; gap: 28px; }
-        nav ul li a { color: var(--muted); font-size: 12px; font-weight: 400; letter-spacing: -0.01em; transition: color .2s ease; }
-        nav ul li a:hover { color: var(--text); text-decoration: none; }
+        nav ul li a { color: var(--muted); font-size: 12px; transition: color .2s; }
+        nav ul li a:hover { color: var(--black); }
 
-        /* ── Layout ── */
         .container { max-width: 980px; margin: 0 auto; padding: 0 22px; }
         .bg-off { background: var(--off-white); }
 
-        section {
-            padding: 120px 0;
-            opacity: 0; transform: translateY(30px);
-            transition: opacity 0.8s cubic-bezier(.25,.1,.25,1),
-                        transform 0.8s cubic-bezier(.25,.1,.25,1);
-        }
+        section { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
         section.visible { opacity: 1; transform: translateY(0); }
-        section h2 { text-align: center; margin-bottom: 60px; }
-        section p.section-intro { text-align: center; max-width: 600px; margin: 0 auto 60px; }
 
-        /* ── Hero with background image ── */
+        /* ── Hero ── */
         .hero {
             position: relative; min-height: 100vh;
             display: flex; flex-direction: column;
@@ -91,24 +75,30 @@
         }
         .hero .hero-overlay {
             position: absolute; inset: 0;
-            background: rgba(251,251,253,.55); z-index: 1;
+            background: rgba(251,251,253,.5); z-index: 1;
         }
         .hero > * { position: relative; z-index: 2; }
-        .hero .eyebrow { font-size: 17px; color: var(--muted); font-weight: 400; margin-bottom: 12px; letter-spacing: -0.01em; }
+        .hero .eyebrow { font-size: 17px; color: var(--muted); margin-bottom: 12px; }
         .hero h1 {
             background: linear-gradient(135deg, #1d1d1f 0%, #424245 50%, #1d1d1f 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
-        .hero p { max-width: 600px; font-size: 21px; line-height: 1.38; margin-bottom: 36px; }
+        .hero .tagline {
+            max-width: 640px; font-size: 21px; line-height: 1.38; margin-bottom: 8px;
+            color: var(--black); font-weight: 500;
+        }
+        .hero .subtagline {
+            max-width: 560px; font-size: 19px; margin-bottom: 40px;
+        }
         .hero .cta-group { display: flex; gap: 24px; align-items: center; }
         .hero .cta-btn {
             display: inline-flex; align-items: center; background: var(--blue); color: #fff;
             padding: 12px 28px; border-radius: 980px; font-size: 17px; font-weight: 500;
-            letter-spacing: -0.01em; transition: background .2s ease;
+            transition: background .2s;
         }
         .hero .cta-btn:hover { background: var(--blue-h); text-decoration: none; }
-        .hero .cta-link { font-size: 21px; font-weight: 500; color: var(--blue); }
+        .hero .cta-link { font-size: 19px; font-weight: 500; color: var(--blue); }
         .hero .cta-link::after { content: ' ›'; }
         .scroll-hint {
             position: absolute; bottom: 40px; z-index: 2;
@@ -116,182 +106,298 @@
         }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 
-        /* ── Image showcase (full-width) ── */
-        .showcase { width: 100%; overflow: hidden; }
-        .showcase img { width: 100%; display: block; }
+        /* ── Experience cards ── */
+        .exp-section { padding: 100px 0; }
+        .exp-section-title { text-align: center; margin-bottom: 60px; }
+        .exp-section-title h2 { font-size: 32px; margin-bottom: 8px; }
+        .exp-section-title p { font-size: 17px; }
 
-        /* ── Decorative divider ── */
-        .divider {
-            width: 100%; height: 180px; overflow: hidden; position: relative;
+        .exp-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            max-width: 980px;
+            margin: 0 auto 40px;
+            border-radius: 24px;
+            overflow: hidden;
+            background: var(--off-white);
         }
-        .divider .divider-img {
-            width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;
+        .exp-card:nth-child(even) .exp-image { order: 2; }
+        .exp-card:nth-child(even) .exp-content { order: 1; }
+
+        .exp-image {
+            width: 100%;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+        }
+        .exp-image img {
+            width: 100%; height: 100%; object-fit: cover;
         }
 
-        /* ── About ── */
-        #about { padding: 140px 0; }
-        #about .about-inner { max-width: 680px; margin: 0 auto; text-align: center; }
-        #about p { font-size: 21px; line-height: 1.5; }
+        .exp-content { padding: 48px 44px; display: flex; flex-direction: column; justify-content: center; }
+        .exp-label {
+            font-size: 12px; text-transform: uppercase; letter-spacing: .02em;
+            color: var(--muted); font-weight: 500; margin-bottom: 10px;
+        }
+        .exp-content h3 { font-size: 28px; margin-bottom: 16px; }
+        .exp-content p { font-size: 15px; line-height: 1.6; color: var(--black); }
 
-        /* ── Project cards ── */
-        .grid {
-            display: grid; gap: 20px;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        }
-        .card {
-            background: var(--off-white); border-radius: 24px; padding: 44px 40px;
-            transition: transform .35s cubic-bezier(.25,.1,.25,1), box-shadow .35s ease;
-        }
-        .card:hover { transform: scale(1.02); box-shadow: 0 20px 60px rgba(0,0,0,.06); }
-        .card .card-label { font-size: 12px; color: var(--muted); font-weight: 500; letter-spacing: -0.01em; margin-bottom: 8px; text-transform: uppercase; }
-        .card h3 { margin-bottom: 10px; }
-        .card p { font-size: 17px; line-height: 1.5; }
+        /* ── Thought Leadership ── */
+        .tl-section { padding: 100px 0; }
+        .tl-section .tl-title { text-align: center; margin-bottom: 60px; }
+        .tl-section .tl-title h2 { font-size: 32px; margin-bottom: 8px; }
+        .tl-section .tl-title p { font-size: 17px; }
 
-        /* ── Skills — tag row ── */
-        .tags { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-        .tag {
-            display: inline-flex; background: var(--off-white);
-            padding: 8px 18px; border-radius: 980px;
-            font-size: 15px; color: var(--text); font-weight: 500;
+        .tl-cards {
+            display: grid;
+            gap: 20px;
+            max-width: 980px;
+            margin: 0 auto;
         }
+        .tl-card {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 0;
+            border-radius: 24px;
+            overflow: hidden;
+            background: var(--off-white);
+        }
+        .tl-image {
+            width: 100%;
+            aspect-ratio: 16/10;
+            overflow: hidden;
+        }
+        .tl-image img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        .tl-content { padding: 32px; display: flex; flex-direction: column; justify-content: center; }
+        .tl-date {
+            font-size: 12px; color: var(--muted); font-weight: 500; margin-bottom: 8px;
+        }
+        .tl-content h3 { font-size: 22px; margin-bottom: 8px; }
+        .tl-content p { font-size: 15px; line-height: 1.6; color: var(--black); }
+        .tl-link {
+            display: inline-block; margin-top: 16px; font-size: 15px; font-weight: 500;
+            color: var(--blue);
+        }
+        .tl-link::after { content: ' ›'; }
 
         /* ── Contact ── */
-        #contact { padding: 100px 0 140px; }
-        #contact p { text-align: center; max-width: 560px; margin: 0 auto 40px; }
+        #contact { padding: 80px 0 100px; }
+        #contact p { text-align: center; max-width: 520px; margin: 0 auto 32px; }
         .contact-links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
         .btn {
             display: inline-flex; align-items: center; background: var(--blue); color: #fff;
             padding: 14px 32px; border-radius: 980px; font-size: 17px; font-weight: 500;
-            letter-spacing: -0.01em; transition: background .2s ease;
+            transition: background .2s;
         }
         .btn:hover { background: var(--blue-h); text-decoration: none; }
 
         /* ── Footer ── */
         footer {
-            text-align: center; padding: 36px 22px; color: var(--muted);
-            font-size: 12px; background: var(--off-white);
+            text-align: center; padding: 32px 22px; color: var(--muted);
+            font-size: 12px;
         }
-        footer a { color: var(--muted); }
 
         /* ── Responsive ── */
         @media (max-width: 734px) {
-            h1 { font-size: 40px; }
-            h2 { font-size: 32px; }
-            p  { font-size: 17px; }
-            section { padding: 80px 0; }
-            nav ul { gap: 18px; }
-            .hero p, .hero .cta-btn, .hero .cta-link { font-size: 17px; }
-            .grid { grid-template-columns: 1fr; }
-            .card { padding: 32px 28px; }
-            .divider { height: 120px; }
+            h1 { font-size: 36px; }
+            h2 { font-size: 28px; }
+            h3 { font-size: 22px; }
+            p  { font-size: 16px; }
+            nav ul { gap: 14px; }
+            .hero .tagline { font-size: 16px; }
+            .hero .cta-group { flex-direction: column; }
+            .exp-card { grid-template-columns: 1fr; }
+            .exp-card:nth-child(even) .exp-image,
+            .exp-card:nth-child(even) .exp-content { order: unset; }
+            .exp-image { aspect-ratio: 16/9; }
+            .exp-content { padding: 28px 24px; }
+            .tl-cards { grid-template-columns: 1fr; }
+            .tl-card { grid-template-columns: 1fr; }
+            .tl-image { aspect-ratio: 16/9; }
+            .tl-content { padding: 24px; }
         }
     </style>
 </head>
 <body>
 
-<!-- ── Navbar ── -->
 <nav>
     <div class="container">
         <span class="logo">Tony Dang</span>
         <ul>
             <li><a href="#about">About</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#skills">Skills</a></li>
+            <li><a href="#career">Career</a></li>
+            <li><a href="#writings">Latest Thinkings</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </div>
 </nav>
 
-<!-- ── Hero with abstract blue background ── -->
+<!-- ── Hero ── -->
 <header class="hero">
     <div class="hero-bg"></div>
     <div class="hero-overlay"></div>
-    <p class="eyebrow">Hello, I'm</p>
+    <p class="eyebrow">Executive · Melbourne</p>
     <h1>Tony Dang.</h1>
-    <p>Developer crafting clean digital experiences.</p>
+    <p class="tagline">AI & Data Risk Leader | Data, Automation and AI Transformation | Building Trust in Emerging Tech</p>
+    <p class="subtagline">Head of Data Risk & AI Governance</p>
     <div class="cta-group">
-        <a class="cta-btn" href="#projects">View my work</a>
-        <a class="cta-link" href="#contact">Get in touch</a>
+        <a class="cta-btn" href="#career">View career</a>
+        <a class="cta-link" href="#contact">Connect</a>
     </div>
     <span class="scroll-hint">⌄</span>
 </header>
 
-<!-- ── Full-width showcase: clean workspace ── -->
-<div class="showcase">
-    <img src="images/hero-2.png" alt="Clean workspace with laptop and coffee" loading="lazy">
-</div>
-
 <!-- ── About ── -->
 <section id="about">
-    <div class="about-inner">
-        <p>
-            I'm a developer passionate about building thoughtful, 
-            well-crafted software. Based in Australia, I focus on 
-            creating clean, performant experiences that make a 
-            real difference.
+    <div class="container" style="max-width:680px;text-align:center;padding:80px 22px;">
+        <p style="font-size:17px;color:var(--muted);line-height:1.5;margin-bottom:16px;">
+            I lead AI risk, data governance, and automation strategy across large financial 
+            institutions. I design enterprise frameworks that balance innovation with regulatory 
+            expectations — building trust in emerging technology while driving measurable outcomes.
         </p>
     </div>
 </section>
 
-<!-- ── Decorative divider: network nodes ── -->
-<div class="divider">
-    <img class="divider-img" src="images/hero-3.png" alt="" loading="lazy">
-</div>
-
-<!-- ── Full-width showcase: 3D pastel shapes ── -->
-<div class="showcase">
-    <img src="images/hero-4.png" alt="3D geometric shapes" loading="lazy">
-</div>
-
-<!-- ── Projects ── -->
-<section id="projects" class="bg-off">
-    <h2>Projects</h2>
-    <p class="section-intro">A selection of things I've built.</p>
-    <div class="grid">
-        <div class="card">
-            <span class="card-label">Project</span>
-            <h3>Project One</h3>
-            <p>Brief description of the project and the problem it solves.</p>
+<!-- ── Career ── -->
+<section id="career" class="exp-section bg-off">
+    <div class="container">
+        <div class="exp-section-title">
+            <h2>Career</h2>
         </div>
-        <div class="card">
-            <span class="card-label">Project</span>
-            <h3>Project Two</h3>
-            <p>Brief description of the project and the problem it solves.</p>
+
+        <!-- Experience 1: Current Leadership -->
+        <div class="exp-card">
+            <div class="exp-image">
+                <img src="images/experience-ai-governance.png" alt="AI governance" loading="lazy">
+            </div>
+            <div class="exp-content">
+                <span class="exp-label">Current Role</span>
+                <h3>Data Risk & AI Governance</h3>
+                <p>
+                    Leading enterprise AI risk management — designing frameworks for risk 
+                    appetite, assessment processes, and control taxonomies. Establishing 
+                    data as a dedicated risk category and leading the highest governing 
+                    body for AI across the organisation. Driving Responsible AI principles 
+                    and enterprise capability uplift.
+                </p>
+            </div>
         </div>
-        <div class="card">
-            <span class="card-label">Project</span>
-            <h3>Project Three</h3>
-            <p>Brief description of the project and the problem it solves.</p>
+
+        <!-- Experience 2: Strategy & Automation -->
+        <div class="exp-card">
+            <div class="exp-image">
+                <img src="images/experience-automation.png" alt="Strategy and automation" loading="lazy">
+            </div>
+            <div class="exp-content">
+                <span class="exp-label">Strategy & Automation</span>
+                <h3>Data & Automation Strategy</h3>
+                <p>
+                    Developed enterprise data and automation strategies, governing a $100m 
+                    investment portfolio. Delivered process automation, customer experience 
+                    improvements, and data-driven revenue opportunities across a global 
+                    organisation. Positioned data as a strategic asset.
+                </p>
+            </div>
+        </div>
+
+        <!-- Experience 3: Risk & Regulation -->
+        <div class="exp-card">
+            <div class="exp-image">
+                <img src="images/experience-compliance.png" alt="Regulatory compliance" loading="lazy">
+            </div>
+            <div class="exp-content">
+                <span class="exp-label">Risk & Regulation</span>
+                <h3>Regulatory Credit Risk</h3>
+                <p>
+                    Implemented Basel II/III Credit Risk Calculation Engines across multiple 
+                    jurisdictions. Improved credit capital efficiency through enhanced regulatory 
+                    data integrity, integrating stress testing and capital reporting at scale 
+                    for complex financial institutions.
+                </p>
+            </div>
+        </div>
+
+        <!-- Experience 4: Product Consulting -->
+        <div class="exp-card">
+            <div class="exp-image">
+                <img src="images/experience-consulting.png" alt="Enterprise consulting" loading="lazy">
+            </div>
+            <div class="exp-content">
+                <span class="exp-label">Product Consulting</span>
+                <h3>Enterprise Risk Solutions</h3>
+                <p>
+                    Led enterprise-scale implementations across Australia, New Zealand, and 
+                    Singapore. Delivered large exposure reporting and credit risk solutions 
+                    for major financial institutions, managing development teams and delivering 
+                    customised products to enterprise clients.
+                </p>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- ── Decorative divider: purple waves ── -->
-<div class="divider">
-    <img class="divider-img" src="images/hero-5.png" alt="" loading="lazy">
-</div>
+<!-- ── Thought Leadership ── -->
+<section id="writings" class="tl-section">
+    <div class="container">
+        <div class="tl-title">
+            <h2>Latest Thinkings</h2>
+            <p>Insights on AI governance, data strategy, and responsible innovation.</p>
+        </div>
 
-<!-- ── Skills ── -->
-<section id="skills">
-    <h2>Skills</h2>
-    <div class="tags">
-        <span class="tag">HTML / CSS</span>
-        <span class="tag">JavaScript</span>
-        <span class="tag">Python</span>
-        <span class="tag">React</span>
-        <span class="tag">Node.js</span>
-        <span class="tag">Git</span>
+        <div class="tl-cards">
+            <!-- Article 1 -->
+            <div class="tl-card">
+                <div class="tl-image">
+                    <img src="images/article-data.png" alt="Article 1" loading="lazy">
+                </div>
+                <div class="tl-content">
+                    <span class="tl-date">Coming soon</span>
+                    <h3>Article One</h3>
+                    <p>Preview of future content on AI governance, data strategy, or responsible innovation. This section will showcase published articles and thought leadership pieces.</p>
+                    <a class="tl-link" href="#">Read more</a>
+                </div>
+            </div>
+
+            <!-- Article 2 -->
+            <div class="tl-card">
+                <div class="tl-image">
+                    <img src="images/article-governance.png" alt="Article 2" loading="lazy">
+                </div>
+                <div class="tl-content">
+                    <span class="tl-date">Coming soon</span>
+                    <h3>Article Two</h3>
+                    <p>Preview of future content on AI governance, data strategy, or responsible innovation. This section will showcase published articles and thought leadership pieces.</p>
+                    <a class="tl-link" href="#">Read more</a>
+                </div>
+            </div>
+
+            <!-- Article 3 -->
+            <div class="tl-card">
+                <div class="tl-image">
+                    <img src="images/article-strategy.png" alt="Article 3" loading="lazy">
+                </div>
+                <div class="tl-content">
+                    <span class="tl-date">Coming soon</span>
+                    <h3>Article Three</h3>
+                    <p>Preview of future content on AI governance, data strategy, or responsible innovation. This section will showcase published articles and thought leadership pieces.</p>
+                    <a class="tl-link" href="#">Read more</a>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
 <!-- ── Contact ── -->
 <section id="contact" class="bg-off">
-    <h2>Contact</h2>
-    <p>Feel free to reach out — I'm always happy to connect.</p>
-    <div class="contact-links">
-        <a class="btn" href="mailto:you@email.com">Email</a>
-        <a class="btn" href="https://github.com/tdintelligence" target="_blank">GitHub</a>
-        <a class="btn" href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a>
+    <div class="container" style="text-align:center;">
+        <h2 style="margin-bottom:12px;">Connect</h2>
+        <p>Open to connecting with fellow leaders in AI governance and data strategy.</p>
+        <div class="contact-links">
+            <a class="btn" href="https://linkedin.com/in/dangdinhtrung" target="_blank">LinkedIn</a>
+            <a class="btn" href="https://github.com/tdintelligence" target="_blank">GitHub</a>
+        </div>
     </div>
 </section>
 
@@ -308,7 +414,7 @@
                 if (entry.isIntersecting) entry.target.classList.add('visible');
             });
         },
-        { threshold: 0.15 }
+        { threshold: 0.1 }
     );
     sections.forEach(s => observer.observe(s));
 </script>
