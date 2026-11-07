@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name — Personal Site</title>
+    <title>Tony Dang — Personal Site</title>
     <style>
         /* ── Reset & Base ── */
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,22 +32,18 @@
             font-size: 17px;
             letter-spacing: -0.022em;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        h1, h2, h3 {
-            letter-spacing: -0.015em;
-        }
-
+        h1, h2, h3 { letter-spacing: -0.015em; }
         h1 { font-size: 56px; line-height: 1.07143; font-weight: 700; }
         h2 { font-size: 40px; line-height: 1.1; font-weight: 600; }
         h3 { font-size: 24px; line-height: 1.16667; font-weight: 600; }
-
         p  { font-size: 19px; line-height: 1.4211; color: var(--muted); }
 
         a { color: var(--blue); text-decoration: none; transition: color .2s ease; }
         a:hover { color: var(--blue-h); text-decoration: underline; }
-
-        img { max-width: 100%; }
+        img { max-width: 100%; display: block; }
 
         /* ── Navbar — Apple style ── */
         nav {
@@ -62,214 +58,118 @@
             display: flex; align-items: center; justify-content: space-between;
             height: 48px; padding: 0 22px;
         }
-        nav .logo {
-            font-size: 18px; font-weight: 600;
-            color: var(--text); letter-spacing: -0.01em;
-        }
-        nav ul {
-            list-style: none; display: flex; gap: 28px;
-        }
-        nav ul li a {
-            color: var(--muted); font-size: 12px; font-weight: 400;
-            letter-spacing: -0.01em; transition: color .2s ease;
-        }
-        nav ul li a:hover {
-            color: var(--text); text-decoration: none;
-        }
+        nav .logo { font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+        nav ul { list-style: none; display: flex; gap: 28px; }
+        nav ul li a { color: var(--muted); font-size: 12px; font-weight: 400; letter-spacing: -0.01em; transition: color .2s ease; }
+        nav ul li a:hover { color: var(--text); text-decoration: none; }
 
-        /* ── Sections ── */
-        .container {
-            max-width: 980px; margin: 0 auto; padding: 0 22px;
-        }
+        /* ── Layout ── */
+        .container { max-width: 980px; margin: 0 auto; padding: 0 22px; }
+        .bg-off { background: var(--off-white); }
+
         section {
             padding: 120px 0;
-            opacity: 0;
-            transform: translateY(30px);
+            opacity: 0; transform: translateY(30px);
             transition: opacity 0.8s cubic-bezier(.25,.1,.25,1),
                         transform 0.8s cubic-bezier(.25,.1,.25,1);
         }
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        section h2 {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        section p.section-intro {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 60px;
-        }
+        section.visible { opacity: 1; transform: translateY(0); }
+        section h2 { text-align: center; margin-bottom: 60px; }
+        section p.section-intro { text-align: center; max-width: 600px; margin: 0 auto 60px; }
 
-        /* ── Hero — full-screen, centered ── */
+        /* ── Hero with background image ── */
         .hero {
-            min-height: 100vh;
+            position: relative; min-height: 100vh;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            text-align: center;
-            padding: 0 22px;
+            text-align: center; padding: 0 22px;
         }
-        .hero .eyebrow {
-            font-size: 17px;
-            color: var(--muted);
-            font-weight: 400;
-            margin-bottom: 12px;
-            letter-spacing: -0.01em;
+        .hero .hero-bg {
+            position: absolute; inset: 0;
+            background: url('images/hero-1.png') center/cover no-repeat;
+            z-index: 0;
         }
+        .hero .hero-overlay {
+            position: absolute; inset: 0;
+            background: rgba(251,251,253,.55); z-index: 1;
+        }
+        .hero > * { position: relative; z-index: 2; }
+        .hero .eyebrow { font-size: 17px; color: var(--muted); font-weight: 400; margin-bottom: 12px; letter-spacing: -0.01em; }
         .hero h1 {
             background: linear-gradient(135deg, #1d1d1f 0%, #424245 50%, #1d1d1f 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
             margin-bottom: 20px;
         }
-        .hero p {
-            max-width: 600px;
-            font-size: 21px;
-            line-height: 1.38;
-            margin-bottom: 36px;
-        }
-        .hero .cta-group {
-            display: flex; gap: 24px;
-            align-items: center;
-        }
+        .hero p { max-width: 600px; font-size: 21px; line-height: 1.38; margin-bottom: 36px; }
+        .hero .cta-group { display: flex; gap: 24px; align-items: center; }
         .hero .cta-btn {
-            display: inline-flex; align-items: center;
-            background: var(--blue);
-            color: #fff;
-            padding: 12px 28px;
-            border-radius: 980px;
-            font-size: 17px;
-            font-weight: 500;
-            letter-spacing: -0.01em;
-            transition: background .2s ease;
+            display: inline-flex; align-items: center; background: var(--blue); color: #fff;
+            padding: 12px 28px; border-radius: 980px; font-size: 17px; font-weight: 500;
+            letter-spacing: -0.01em; transition: background .2s ease;
         }
-        .hero .cta-btn:hover {
-            background: var(--blue-h);
-            text-decoration: none;
-        }
-        .hero .cta-link {
-            font-size: 21px;
-            font-weight: 500;
-            color: var(--blue);
-        }
+        .hero .cta-btn:hover { background: var(--blue-h); text-decoration: none; }
+        .hero .cta-link { font-size: 21px; font-weight: 500; color: var(--blue); }
         .hero .cta-link::after { content: ' ›'; }
-
-        /* ── Scroll hint ── */
         .scroll-hint {
-            position: absolute;
-            bottom: 40px;
-            animation: float 2.4s ease-in-out infinite;
-            color: var(--muted);
-            font-size: 28px;
+            position: absolute; bottom: 40px; z-index: 2;
+            animation: float 2.4s ease-in-out infinite; color: var(--muted); font-size: 28px;
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(8px); }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
+        /* ── Image showcase (full-width) ── */
+        .showcase { width: 100%; overflow: hidden; }
+        .showcase img { width: 100%; display: block; }
+
+        /* ── Decorative divider ── */
+        .divider {
+            width: 100%; height: 180px; overflow: hidden; position: relative;
+        }
+        .divider .divider-img {
+            width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;
         }
 
-        /* ── Sections — alternating backgrounds ── */
-        .bg-off  { background: var(--off-white); }
-
-        /* ── About — large type ── */
-        #about {
-            padding: 140px 0;
-        }
-        #about .about-inner {
-            max-width: 680px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        #about p {
-            font-size: 21px;
-            line-height: 1.5;
-        }
+        /* ── About ── */
+        #about { padding: 140px 0; }
+        #about .about-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+        #about p { font-size: 21px; line-height: 1.5; }
 
         /* ── Project cards ── */
         .grid {
-            display: grid;
-            gap: 20px;
+            display: grid; gap: 20px;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         }
         .card {
-            background: var(--off-white);
-            border-radius: 24px;
-            padding: 44px 40px;
-            transition: transform .35s cubic-bezier(.25,.1,.25,1),
-                        box-shadow .35s ease;
+            background: var(--off-white); border-radius: 24px; padding: 44px 40px;
+            transition: transform .35s cubic-bezier(.25,.1,.25,1), box-shadow .35s ease;
         }
-        .card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 20px 60px rgba(0,0,0,.06);
-        }
-        .card .card-label {
-            font-size: 12px;
-            color: var(--muted);
-            font-weight: 500;
-            letter-spacing: -0.01em;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-        .card h3 {
-            margin-bottom: 10px;
-        }
-        .card p {
-            font-size: 17px;
-            line-height: 1.5;
-        }
+        .card:hover { transform: scale(1.02); box-shadow: 0 20px 60px rgba(0,0,0,.06); }
+        .card .card-label { font-size: 12px; color: var(--muted); font-weight: 500; letter-spacing: -0.01em; margin-bottom: 8px; text-transform: uppercase; }
+        .card h3 { margin-bottom: 10px; }
+        .card p { font-size: 17px; line-height: 1.5; }
 
         /* ── Skills — tag row ── */
-        .tags {
-            display: flex; flex-wrap: wrap;
-            gap: 10px; justify-content: center;
-        }
+        .tags { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
         .tag {
-            display: inline-flex;
-            background: var(--off-white);
-            padding: 8px 18px;
-            border-radius: 980px;
-            font-size: 15px;
-            color: var(--text);
-            font-weight: 500;
+            display: inline-flex; background: var(--off-white);
+            padding: 8px 18px; border-radius: 980px;
+            font-size: 15px; color: var(--text); font-weight: 500;
         }
 
         /* ── Contact ── */
-        #contact {
-            padding: 140px 0 100px;
-        }
-        #contact p {
-            text-align: center;
-            max-width: 560px;
-            margin: 0 auto 40px;
-        }
-        .contact-links {
-            display: flex; gap: 16px;
-            justify-content: center; flex-wrap: wrap;
-        }
+        #contact { padding: 100px 0 140px; }
+        #contact p { text-align: center; max-width: 560px; margin: 0 auto 40px; }
+        .contact-links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
         .btn {
-            display: inline-flex; align-items: center;
-            background: var(--blue);
-            color: #fff;
-            padding: 14px 32px;
-            border-radius: 980px;
-            font-size: 17px;
-            font-weight: 500;
-            letter-spacing: -0.01em;
-            transition: background .2s ease;
+            display: inline-flex; align-items: center; background: var(--blue); color: #fff;
+            padding: 14px 32px; border-radius: 980px; font-size: 17px; font-weight: 500;
+            letter-spacing: -0.01em; transition: background .2s ease;
         }
-        .btn:hover {
-            background: var(--blue-h);
-            text-decoration: none;
-        }
+        .btn:hover { background: var(--blue-h); text-decoration: none; }
 
         /* ── Footer ── */
         footer {
-            text-align: center;
-            padding: 36px 22px;
-            color: var(--muted);
-            font-size: 12px;
-            background: var(--off-white);
+            text-align: center; padding: 36px 22px; color: var(--muted);
+            font-size: 12px; background: var(--off-white);
         }
         footer a { color: var(--muted); }
 
@@ -280,16 +180,10 @@
             p  { font-size: 17px; }
             section { padding: 80px 0; }
             nav ul { gap: 18px; }
-            .hero p { font-size: 17px; }
-            .hero .cta-btn, .hero .cta-link {
-                font-size: 17px;
-            }
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            .card {
-                padding: 32px 28px;
-            }
+            .hero p, .hero .cta-btn, .hero .cta-link { font-size: 17px; }
+            .grid { grid-template-columns: 1fr; }
+            .card { padding: 32px 28px; }
+            .divider { height: 120px; }
         }
     </style>
 </head>
@@ -298,7 +192,7 @@
 <!-- ── Navbar ── -->
 <nav>
     <div class="container">
-        <span class="logo">YourName</span>
+        <span class="logo">Tony Dang</span>
         <ul>
             <li><a href="#about">About</a></li>
             <li><a href="#projects">Projects</a></li>
@@ -308,12 +202,13 @@
     </div>
 </nav>
 
-<!-- ── Hero ── -->
+<!-- ── Hero with abstract blue background ── -->
 <header class="hero">
-    <p class="eyebrow">Welcome</p>
-    <h1>Hi, I'm Your Name.</h1>
-    <p>A short tagline about what you do — e.g. "Developer crafting clean digital experiences."
-    </p>
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <p class="eyebrow">Hello, I'm</p>
+    <h1>Tony Dang.</h1>
+    <p>Developer crafting clean digital experiences.</p>
     <div class="cta-group">
         <a class="cta-btn" href="#projects">View my work</a>
         <a class="cta-link" href="#contact">Get in touch</a>
@@ -321,23 +216,37 @@
     <span class="scroll-hint">⌄</span>
 </header>
 
+<!-- ── Full-width showcase: clean workspace ── -->
+<div class="showcase">
+    <img src="images/hero-2.png" alt="Clean workspace with laptop and coffee" loading="lazy">
+</div>
+
 <!-- ── About ── -->
 <section id="about">
     <div class="about-inner">
         <p>
-            Write a paragraph or two about yourself here. Where you're from,
-            what drives you, and what you're working on. This is your
-            elevator pitch.
+            I'm a developer passionate about building thoughtful,
+            well-crafted software. Based in Australia, I focus on
+            creating clean, performant experiences that make a
+            real difference.
         </p>
     </div>
 </section>
 
+<!-- ── Decorative divider: network nodes ── -->
+<div class="divider">
+    <img class="divider-img" src="images/hero-3.png" alt="" loading="lazy">
+</div>
+
+<!-- ── Full-width showcase: 3D pastel shapes ── -->
+<div class="showcase">
+    <img src="images/hero-4.png" alt="3D geometric shapes" loading="lazy">
+</div>
+
 <!-- ── Projects ── -->
 <section id="projects" class="bg-off">
     <h2>Projects</h2>
-    <p class="section-intro">
-        A selection of things I've built.
-    </p>
+    <p class="section-intro">A selection of things I've built.</p>
     <div class="grid">
         <div class="card">
             <span class="card-label">Project</span>
@@ -357,6 +266,11 @@
     </div>
 </section>
 
+<!-- ── Decorative divider: purple waves ── -->
+<div class="divider">
+    <img class="divider-img" src="images/hero-5.png" alt="" loading="lazy">
+</div>
+
 <!-- ── Skills ── -->
 <section id="skills">
     <h2>Skills</h2>
@@ -373,30 +287,25 @@
 <!-- ── Contact ── -->
 <section id="contact" class="bg-off">
     <h2>Contact</h2>
-    <p>
-        Feel free to reach out — I'm always happy to connect.
-    </p>
+    <p>Feel free to reach out — I'm always happy to connect.</p>
     <div class="contact-links">
         <a class="btn" href="mailto:you@email.com">Email</a>
-        <a class="btn" href="https://github.com/yourusername" target="_blank">GitHub</a>
+        <a class="btn" href="https://github.com/tdintelligence" target="_blank">GitHub</a>
         <a class="btn" href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a>
     </div>
 </section>
 
 <!-- ── Footer ── -->
 <footer>
-    <p>© 2026 Your Name. All rights reserved.</p>
+    <p>© 2026 Tony Dang. All rights reserved.</p>
 </footer>
 
 <script>
-    /* ── Scroll reveal ── */
     const sections = document.querySelectorAll('section');
     const observer = new IntersectionObserver(
         (entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
         },
         { threshold: 0.15 }
