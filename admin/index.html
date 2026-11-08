@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Tony Dang</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#fbfbfd">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230071e3'/%3E%3Ctext x='32' y='43' font-family='-apple-system,Helvetica,Arial,sans-serif' font-size='28' font-weight='700' fill='%23fff' text-anchor='middle'%3ETD%3C/text%3E%3C/svg%3E">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --white:      #fbfbfd;
+            --off-white:  #f5f5f7;
+            --black:      #1d1d1f;
+            --muted:      #6e6e73;
+            --blue:       #0071e3;
+            --blue-h:     #0077ed;
+            --red:        #d70015;
+            --hairline:   rgba(0,0,0,.08);
+        }
+
+        html { -webkit-font-smoothing: antialiased; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Icons',
+                         'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+            background: var(--off-white);
+            color: var(--black);
+            line-height: 1.47059;
+            font-size: 17px;
+            letter-spacing: -0.022em;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3 { letter-spacing: -0.015em; }
+        h1 { font-size: 56px; line-height: 1.07143; font-weight: 700; }
+        h2 { font-size: 40px; line-height: 1.1; font-weight: 600; }
+        h3 { font-size: 28px; line-height: 1.15; font-weight: 600; }
+        p  { font-size: 19px; line-height: 1.5; color: var(--muted); }
+        a  { color: var(--blue); text-decoration: none; }
+        a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 6px; }
+
+        .eyebrow {
+            font-size: 13px; font-weight: 500; color: var(--muted);
+            text-transform: uppercase; letter-spacing: .06em; margin-bottom: 14px;
+        }
+
+        /* ── Lock screen ── */
+        .lock-view {
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            padding: 40px 22px;
+        }
+        .lock-card {
+            width: 100%; max-width: 420px;
+            background: var(--white);
+            border: 1px solid var(--hairline);
+            border-radius: 24px;
+            padding: 44px 40px 40px;
+            box-shadow: 0 12px 40px rgba(0,0,0,.06);
+        }
+        .lock-card h1 { font-size: 40px; margin-bottom: 8px; }
+        .lock-card .sub { color: var(--muted); font-size: 17px; margin-bottom: 28px; }
+        .lock-card label {
+            display: block; font-size: 13px; font-weight: 500;
+            color: var(--muted); margin-bottom: 8px;
+        }
+        .lock-card input[type="password"] {
+            width: 100%; padding: 13px 16px;
+            font: inherit; color: var(--black);
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,.15);
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        .lock-card input::placeholder { color: var(--muted); }
+        .lock-card .error {
+            color: var(--red); font-size: 14px; margin-top: 14px;
+            min-height: 20px; text-align: center;
+        }
+        .cta-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 100%; background: var(--blue); color: #fff;
+            padding: 13px 28px; border-radius: 980px;
+            font: inherit; font-size: 17px; font-weight: 500;
+            border: none; cursor: pointer;
+            transition: background .2s;
+        }
+        .cta-btn:hover { background: var(--blue-h); }
+        .cta-btn:disabled { opacity: .6; cursor: wait; }
+        .lock-card .home-link {
+            display: block; text-align: center; margin-top: 22px;
+            font-size: 13px; color: var(--muted);
+        }
+        .lock-card .home-link:hover { color: var(--black); }
+
+        /* ── Admin content view ── */
+        .admin-view { display: none; }
+        .admin-view.visible { display: block; }
+
+        .admin-topbar {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(251,251,253,.85);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 0.5px solid var(--hairline);
+        }
+        .admin-topbar .bar-inner {
+            max-width: 760px; margin: 0 auto;
+            display: flex; align-items: center; gap: 12px;
+            height: 56px; padding: 0 22px;
+        }
+        .admin-topbar .brand { font-size: 15px; font-weight: 600; white-space: nowrap; }
+        .search-input {
+            flex: 1; max-width: 300px; min-width: 0;
+            padding: 8px 14px;
+            font: inherit; font-size: 14px; letter-spacing: normal;
+            color: var(--black);
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,.15);
+            border-radius: 980px;
+        }
+        .search-input::placeholder { color: var(--muted); }
+        .lock-btn {
+            margin-left: auto;
+            background: none; border: none; cursor: pointer;
+            font: inherit; font-size: 13px; font-weight: 500;
+            color: var(--muted); padding: 6px 10px; border-radius: 980px;
+            transition: color .2s; white-space: nowrap;
+        }
+        .lock-btn:hover { color: var(--black); }
+
+        .admin-main { max-width: 760px; margin: 0 auto; padding: 48px 22px 80px; }
+        .admin-main .page-head { margin-bottom: 28px; }
+        .admin-main .page-head h1 { font-size: 44px; margin-bottom: 6px; }
+        .admin-main .page-head .status-line { color: var(--muted); font-size: 13px; letter-spacing: 0; }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .pill-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--blue); color: #fff;
+            padding: 9px 20px; border-radius: 980px;
+            font: inherit; font-size: 14px; font-weight: 500;
+            border: none; cursor: pointer;
+            transition: background .2s;
+        }
+        .pill-btn:hover { background: var(--blue-h); }
+        .ghost-btn {
+            display: inline-flex; align-items: center;
+            background: none; color: var(--muted);
+            padding: 9px 14px; border-radius: 980px;
+            border: 1px solid rgba(0,0,0,.15);
+            font: inherit; font-size: 13px; font-weight: 500;
+            cursor: pointer; transition: color .2s, border-color .2s;
+        }
+        .ghost-btn:hover { color: var(--black); border-color: rgba(0,0,0,.3); }
+        .ghost-btn.danger:hover { color: var(--red); border-color: var(--red); }
+
+        /* Filter chip */
+        .filter-chip {
+            display: none;
+            align-items: center; gap: 8px;
+            background: var(--white); border: 1px solid rgba(0,0,0,.15);
+            border-radius: 980px; padding: 6px 8px 6px 14px;
+            font-size: 13px; color: var(--black); margin-bottom: 18px;
+        }
+        .filter-chip.visible { display: inline-flex; }
+        .filter-chip .chip-x {
+            background: var(--off-white); border: none; cursor: pointer;
+            width: 20px; height: 20px; border-radius: 980px;
+            font-size: 12px; line-height: 1; color: var(--muted);
+            display: inline-flex; align-items: center; justify-content: center;
+        }
+        .filter-chip .chip-x:hover { color: var(--black); }
+
+        /* Entry cards */
+        .entry {
+            background: var(--white);
+            border: 1px solid var(--hairline);
+            border-radius: 24px;
+            padding: 32px 36px 28px;
+            margin-bottom: 22px;
+        }
+        .entry h2 { font-size: 26px; margin: 6px 0 14px; }
+        .entry .entry-meta { font-size: 13px; color: var(--muted); letter-spacing: 0; }
+        .entry p, .entry li { font-size: 17px; color: var(--black); }
+        .entry h3 { font-size: 20px; margin: 22px 0 8px; color: var(--black); }
+        .entry ul { margin: 8px 0 8px 22px; }
+        .entry li { margin-bottom: 6px; }
+        .entry li::marker { color: var(--blue); }
+
+        .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 14px; }
+        .tag {
+            display: inline-flex; align-items: center;
+            background: rgba(0,113,227,.08); color: var(--blue);
+            border: none; cursor: pointer;
+            padding: 4px 12px; border-radius: 980px;
+            font: inherit; font-size: 12px; font-weight: 500; letter-spacing: 0;
+            transition: background .2s, color .2s;
+        }
+        .tag:hover { background: rgba(0,113,227,.16); }
+        .tag.active { background: var(--blue); color: #fff; }
+
+        .card-actions {
+            display: flex; gap: 8px; justify-content: flex-end;
+            margin-top: 18px; padding-top: 14px;
+            border-top: 1px solid var(--hairline);
+        }
+
+        .empty-state {
+            text-align: center; color: var(--muted);
+            background: var(--white); border: 1px dashed rgba(0,0,0,.18);
+            border-radius: 24px; padding: 56px 24px; font-size: 17px;
+        }
+
+        /* ── Editor ── */
+        .editor { display: none; }
+        .editor.visible { display: block; }
+        .list-view.hidden { display: none; }
+        .editor-card {
+            background: var(--white);
+            border: 1px solid var(--hairline);
+            border-radius: 24px;
+            padding: 36px;
+        }
+        .editor-card .back-link {
+            display: inline-block; font-size: 14px; color: var(--muted);
+            margin-bottom: 20px; cursor: pointer;
+        }
+        .editor-card .back-link:hover { color: var(--black); }
+        .editor-card h1 { font-size: 32px; margin-bottom: 24px; }
+        .field { margin-bottom: 20px; }
+        .field label {
+            display: block; font-size: 13px; font-weight: 500;
+            color: var(--muted); margin-bottom: 8px;
+        }
+        .field label .hint { font-weight: 400; }
+        .field input, .field textarea {
+            width: 100%; padding: 12px 16px;
+            font: inherit; font-size: 17px; letter-spacing: -0.01em; line-height: 1.5;
+            color: var(--black);
+            background: var(--white);
+            border: 1px solid rgba(0,0,0,.15);
+            border-radius: 12px;
+        }
+        .field textarea { min-height: 340px; resize: vertical; }
+        .field input::placeholder, .field textarea::placeholder { color: var(--muted); }
+        .editor-actions { display: flex; gap: 12px; margin-top: 8px; }
+        .editor-actions .cta-btn { width: auto; }
+        .editor-meta { font-size: 13px; color: var(--muted); margin-top: 16px; letter-spacing: 0; }
+
+        /* Toast */
+        .toast {
+            position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px);
+            background: var(--black); color: #fff;
+            padding: 10px 22px; border-radius: 980px;
+            font-size: 14px; opacity: 0; pointer-events: none;
+            transition: opacity .25s, transform .25s;
+            z-index: 200;
+        }
+        .toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        @media (max-width: 734px) {
+            h1 { font-size: 38px; }
+            .admin-main .page-head h1 { font-size: 34px; }
+            .lock-card { padding: 36px 28px; }
+            .entry { padding: 26px 24px 22px; }
+            .editor-card { padding: 28px 24px; }
+            .admin-topbar .bar-inner { height: auto; padding: 10px 22px; flex-wrap: wrap; }
+            .search-input { max-width: none; order: 3; flex-basis: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── Lock screen ── -->
+    <div class="lock-view" id="lockView">
+        <div class="lock-card">
+            <p class="eyebrow">Private</p>
+            <h1>Admin</h1>
+            <p class="sub">This space is encrypted. Enter your password to unlock it.</p>
+            <form id="lockForm" autocomplete="off">
+                <label for="pw">Password</label>
+                <input type="password" id="pw" name="pw" placeholder="Enter password"
+                       autocomplete="current-password" autocapitalize="off" spellcheck="false" required>
+                <button type="submit" class="cta-btn" id="unlockBtn">Unlock</button>
+                <p class="error" id="lockError" role="alert"></p>
+            </form>
+            <a class="home-link" href="../index.html">← Back to tdaco.au</a>
+        </div>
+    </div>
+
+    <!-- ── Admin content ── -->
+    <div class="admin-view" id="adminView">
+        <div class="admin-topbar">
+            <div class="bar-inner">
+                <span class="brand">Admin</span>
+                <input type="search" class="search-input" id="searchInput" placeholder="Search title, content, tags…" autocomplete="off">
+                <button class="lock-btn" id="lockBtn" type="button">Lock</button>
+            </div>
+        </div>
+        <main class="admin-main">
+
+            <div class="list-view" id="listView">
+                <div class="page-head">
+                    <p class="eyebrow">Admin space</p>
+                    <h1>Content</h1>
+                    <p class="status-line" id="statusLine"></p>
+                </div>
+
+                <div class="toolbar">
+                    <button class="pill-btn" id="newEntryBtn" type="button">+ New entry</button>
+                    <button class="ghost-btn" id="exportBtn" type="button">Export</button>
+                    <button class="ghost-btn" id="importBtn" type="button">Import</button>
+                    <input type="file" id="importFile" accept=".json,application/json" hidden>
+                </div>
+
+                <div class="filter-chip" id="filterChip">
+                    <span>Tag: <strong id="filterTagName"></strong></span>
+                    <button class="chip-x" id="filterClear" type="button" title="Clear tag filter">✕</button>
+                </div>
+
+                <div id="entriesContainer"></div>
+            </div>
+
+            <div class="editor" id="editorView">
+                <div class="editor-card">
+                    <a class="back-link" id="editorBack" href="#">← Back to content</a>
+                    <h1 id="editorTitle">New entry</h1>
+                    <div class="field">
+                        <label for="edTitle">Title</label>
+                        <input type="text" id="edTitle" placeholder="Entry title" autocomplete="off">
+                    </div>
+                    <div class="field">
+                        <label for="edTags">Tags <span class="hint">— comma separated</span></label>
+                        <input type="text" id="edTags" placeholder="e.g. ideas, article, private" autocomplete="off">
+                    </div>
+                    <div class="field">
+                        <label for="edBody">Content <span class="hint">— “# ” heading, “## ” subheading, “- ” bullet</span></label>
+                        <textarea id="edBody" placeholder="Write your content…"></textarea>
+                    </div>
+                    <div class="editor-actions">
+                        <button class="cta-btn" id="saveEntryBtn" type="button">Save</button>
+                        <button class="ghost-btn" id="cancelEntryBtn" type="button">Cancel</button>
+                    </div>
+                    <p class="editor-meta" id="editorMeta"></p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+    (function () {
+        'use strict';
+
+        // ── Crypto parameters (must match the encryptor) ──
+        // PBKDF2-HMAC-SHA256, 600,000 iterations → AES-256-GCM, 12-byte IV.
+        var SALT = new TextEncoder().encode('tdaco-admin-salt-v1');
+        var ITERATIONS = 600000;
+        var SESSION_KEY = 'tdaco-admin-key';    // sessionStorage slot for the derived key
+        var STORE_KEY = 'tdaco-admin-entries-v1';  // localStorage: user's entries
+        var HIDDEN_KEY = 'tdaco-admin-hidden-v1';  // localStorage: seed ids the user deleted
+
+        var textEncoder = new TextEncoder();
+        var textDecoder = new TextDecoder();
+
+        // ── Element refs ──
+        var lockView    = document.getElementById('lockView');
+        var adminView   = document.getElementById('adminView');
+        var form        = document.getElementById('lockForm');
+        var pwInput     = document.getElementById('pw');
+        var unlockBtn   = document.getElementById('unlockBtn');
+        var lockError   = document.getElementById('lockError');
+        var lockBtn     = document.getElementById('lockBtn');
+        var listView    = document.getElementById('listView');
+        var editorView  = document.getElementById('editorView');
+        var entriesContainer = document.getElementById('entriesContainer');
+        var statusLine  = document.getElementById('statusLine');
+        var searchInput = document.getElementById('searchInput');
+        var filterChip  = document.getElementById('filterChip');
+        var filterTagName = document.getElementById('filterTagName');
+        var filterClear = document.getElementById('filterClear');
+        var newEntryBtn = document.getElementById('newEntryBtn');
+        var exportBtn   = document.getElementById('exportBtn');
+        var importBtn   = document.getElementById('importBtn');
+        var importFile  = document.getElementById('importFile');
+        var edTitle     = document.getElementById('edTitle');
+        var edTags      = document.getElementById('edTags');
+        var edBody      = document.getElementById('edBody');
+        var editorTitle = document.getElementById('editorTitle');
+        var editorMeta  = document.getElementById('editorMeta');
+        var saveEntryBtn = document.getElementById('saveEntryBtn');
+        var cancelEntryBtn = document.getElementById('cancelEntryBtn');
+        var editorBack  = document.getElementById('editorBack');
+        var toastEl     = document.getElementById('toast');
+
+        // ── State ──
+        var seedEntries = [];     // normalized entries from the published content.json
+        var allEntries = [];      // merged: seeds (overridden by local) + local-only
+        var activeTag = null;
+        var editingId = null;     // null = creating a new entry
+        var storageOk = true;
+
+        // ── Small utilities ──
+        function b64ToBytes(b64) {
+            var bin = atob(b64);
+            var bytes = new Uint8Array(bin.length);
+            for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+            return bytes;
+        }
+        function bytesToB64(bytes) {
+            var bin = '';
+            for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+            return btoa(bin);
+        }
+        function esc(s) {
+            return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+        function slug(s) {
+            return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'entry';
+        }
+        function nowIso() { return new Date().toISOString(); }
+
+        function fmtDT(iso) {
+            var d = new Date(iso);
+            if (isNaN(d.getTime())) return iso || '';
+            var date = d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+            var time = d.toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+            return date + ' · ' + time;
+        }
+
+        var toastTimer = null;
+        function toast(msg) {
+            toastEl.textContent = msg;
+            toastEl.classList.add('visible');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(function () { toastEl.classList.remove('visible'); }, 2200);
+        }
+
+        // ── Local persistence (per device/browser) ──
+        function loadStore() {
+            try {
+                var raw = localStorage.getItem(STORE_KEY);
+                var arr = raw ? JSON.parse(raw) : [];
+                return Array.isArray(arr) ? arr : [];
+            } catch (e) { storageOk = false; return []; }
+        }
+        function saveStore(entries) {
+            try { localStorage.setItem(STORE_KEY, JSON.stringify(entries)); storageOk = true; }
+            catch (e) { storageOk = false; }
+        }
+        function loadHidden() {
+            try {
+                var raw = localStorage.getItem(HIDDEN_KEY);
+                var arr = raw ? JSON.parse(raw) : [];
+                return Array.isArray(arr) ? arr : [];
+            } catch (e) { return []; }
+        }
+        function saveHidden(ids) {
+            try { localStorage.setItem(HIDDEN_KEY, JSON.stringify(ids)); } catch (e) { /* non-fatal */ }
+        }
+
+        // ── Crypto ──
+        function deriveKey(password) {
+            return crypto.subtle.importKey('raw', textEncoder.encode(password), 'PBKDF2', false, ['deriveKey'])
+                .then(function (material) {
+                    return crypto.subtle.deriveKey(
+                        { name: 'PBKDF2', salt: SALT, iterations: ITERATIONS, hash: 'SHA-256' },
+                        material,
+                        { name: 'AES-GCM', length: 256 },
+                        true,   // extractable — needed so the key can be kept in sessionStorage for the tab
+                        ['decrypt']
+                    );
+                });
+        }
+
+        function importStoredKey() {
+            var b64 = sessionStorage.getItem(SESSION_KEY);
+            if (!b64) return Promise.resolve(null);
+            return Promise.resolve(
+                crypto.subtle.importKey('raw', b64ToBytes(b64), { name: 'AES-GCM' }, false, ['decrypt'])
+            );
+        }
+
+        function storeKey(key) {
+            return crypto.subtle.exportKey('raw', key)
+                .then(function (raw) { sessionStorage.setItem(SESSION_KEY, bytesToB64(raw)); });
+        }
+
+        function decryptWith(key) {
+            return fetch('content.json', { cache: 'no-store' })
+                .then(function (res) {
+                    if (!res.ok) throw new Error('fetch');
+                    return res.json();
+                })
+                .then(function (payload) {
+                    return crypto.subtle.decrypt(
+                        { name: 'AES-GCM', iv: b64ToBytes(payload.iv) },
+                        key,
+                        b64ToBytes(payload.ct)
+                    );
+                })
+                .then(function (plain) {
+                    return JSON.parse(textDecoder.decode(plain));
+                });
+        }
+
+        // ── Entry normalization & merging ──
+        function isoFromDate(value, fallback) {
+            if (!value) return fallback;
+            var s = String(value);
+            if (s.length === 10 && /^\d{4}-\d{2}-\d{2}$/.test(s)) return s + 'T00:00:00';
+            var d = new Date(s);
+            return isNaN(d.getTime()) ? fallback : d.toISOString();
+        }
+
+        function normalizeSeed(e, i) {
+            var ts = isoFromDate(e.date || e.updated, null) || nowIso();
+            return {
+                id: e.id || ('seed-' + slug(e.title || ('entry-' + i))),
+                title: e.title || 'Untitled',
+                body: e.body || '',
+                tags: Array.isArray(e.tags) ? e.tags.map(String) : [],
+                created: ts,
+                updated: isoFromDate(e.updated || e.date, ts),
+                source: 'seed'
+            };
+        }
+
+        function normalizeImported(e) {
+            var ts = isoFromDate(e.created || e.updated, null) || nowIso();
+            var tags = Array.isArray(e.tags) ? e.tags.map(String) : [];
+            return {
+                id: String(e.id || ('local-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8))),
+                title: String(e.title || 'Untitled'),
+                body: String(e.body || ''),
+                tags: tags,
+                created: ts,
+                updated: isoFromDate(e.updated || e.created, ts),
+                source: 'local'
+            };
+        }
+
+        function buildEntries() {
+            var local = loadStore();
+            var localById = {};
+            local.forEach(function (e) { localById[e.id] = e; });
+            var hidden = {};
+            loadHidden().forEach(function (id) { hidden[id] = true; });
+            var seedIds = {};
+
+            var out = [];
+            seedEntries.forEach(function (se) {
+                seedIds[se.id] = true;
+                if (hidden[se.id]) return;
+                out.push(localById[se.id] || se);   // local override wins
+            });
+            local.forEach(function (le) {
+                if (!seedIds[le.id]) out.push(le); // purely local entries
+            });
+
+            out.sort(function (a, b) {
+                return new Date(b.updated) - new Date(a.updated);
+          });
+            allEntries = out;
+        }
+
+        // ── Rendering ──
+        function renderBody(body) {
+            var lines = String(body || '').split(/\r?\n/);
+            var html = '';
+            var para = [];
+            var inList = false;
+
+            function flushPara() {
+                if (para.length) {
+                    html += '<p>' + para.map(esc).join('<br>') + '</p>';
+                    para = [];
+                }
+            }
+            function closeList() {
+                if (inList) { html += '</ul>'; inList = false; }
+            }
+
+            lines.forEach(function (raw) {
+                var t = raw.trim();
+                if (/^##\s+/.test(t)) {
+                    flushPara(); closeList();
+                    html += '<h3>' + esc(t.replace(/^##\s+/, '')) + '</h3>';
+                } else if (/^#\s+/.test(t)) {
+                    flushPara(); closeList();
+                    html += '<h3>' + esc(t.replace(/^#\s+/, '')) + '</h3>';
+                } else if (/^[-*]\s+/.test(t)) {
+                    flushPara();
+                    if (!inList) { html += '<ul>'; inList = true; }
+                    html += '<li>' + esc(t.replace(/^[-*]\s+/, '')) + '</li>';
+                } else if (t === '') {
+                    flushPara(); closeList();
+                } else {
+                    closeList();
+                    para.push(t);
+                }
+            });
+            flushPara(); closeList();
+            return html;
+        }
+
+        function visibleEntries() {
+            var q = searchInput.value.trim().toLowerCase();
+            return allEntries.filter(function (e) {
+                if (activeTag && e.tags.indexOf(activeTag) === -1) return false;
+                if (!q) return true;
+                var hay = (e.title + ' ' + e.body + ' ' + e.tags.join(' ')).toLowerCase();
+                return hay.indexOf(q) !== -1;
+            });
+        }
+
+        function renderList() {
+            var visible = visibleEntries();
+
+            // Status line
+            var latest = allEntries.length ? allEntries[0].updated : null;
+            statusLine.textContent = allEntries.length
+                ? allEntries.length + ' entr' + (allEntries.length === 1 ? 'y' : 'ies') +
+                  (latest ? ' · latest updated ' + fmtDT(latest) : '') +
+                  (storageOk ? ' · saved on this device' : ' · ⚠ this browser cannot store changes')
+                : 'No entries yet · saved on this device';
+
+            // Filter chip
+            if (activeTag) {
+                filterChip.classList.add('visible');
+                filterTagName.textContent = activeTag;
+            } else {
+                filterChip.classList.remove('visible');
+            }
+
+            // Cards
+            if (!visible.length) {
+                entriesContainer.innerHTML =
+                    '<div class="empty-state">' +
+                    (allEntries.length
+                        ? 'No entries match your search.'
+                        : 'No entries yet. Click “+ New entry” to create your first one.') +
+                    '</div>';
+                return;
+            }
+
+            entriesContainer.innerHTML = visible.map(function (e) {
+                var tags = e.tags.map(function (t) {
+                    return '<button class="tag' + (t === activeTag ? ' active' : '') +
+                        '" data-tag="' + esc(t) + '" type="button">' + esc(t) + '</button>';
+                }).join('');
+
+                return '<section class="entry" data-id="' + esc(e.id) + '">' +
+                    '<p class="entry-meta">' + esc(fmtDT(e.updated)) +
+                    (e.created && e.created !== e.updated ? '  ·  created ' + esc(fmtDT(e.created)) : '') +
+                    '</p>' +
+                    '<h2>' + esc(e.title) + '</h2>' +
+                    (tags ? '<div class="tag-row">' + tags + '</div>' : '') +
+                    renderBody(e.body) +
+                    '<div class="card-actions">' +
+                    '<button class="ghost-btn" data-action="edit" data-id="' + esc(e.id) + '" type="button">Edit</button>' +
+                    '<button class="ghost-btn danger" data-action="delete" data-id="' + esc(e.id) + '" type="button">Delete</button>' +
+                    '</div>' +
+                    '</section>';
+            }).join('\n');
+        }
+
+        function renderAll() {
+            buildEntries();
+            renderList();
+        }
+
+        // ── Editor ──
+        function parseTags(value) {
+            var seen = {};
+            var out = [];
+            String(value).split(',').forEach(function (t) {
+                t = t.trim().toLowerCase();
+                if (t && !seen[t]) { seen[t] = true; out.push(t); }
+            });
+            return out;
+        }
+
+        function openEditor(id) {
+            editingId = id;
+            var entry = null;
+            if (id) {
+                for (var i = 0; i < allEntries.length; i++) {
+                    if (allEntries[i].id === id) { entry = allEntries[i]; break; }
+                }
+            }
+            if (entry) {
+                editorTitle.textContent = 'Edit entry';
+                edTitle.value = entry.title === 'Untitled' ? '' : entry.title;
+                edTags.value = entry.tags.join(', ');
+                edBody.value = entry.body;
+                editorMeta.textContent = 'Created ' + fmtDT(entry.created) + ' · Last updated ' + fmtDT(entry.updated);
+            } else {
+                editorTitle.textContent = 'New entry';
+                edTitle.value = '';
+                edTags.value = '';
+                edBody.value = '';
+                editorMeta.textContent = 'Will be stamped with the current date and time when you save.';
+            }
+            listView.classList.add('hidden');
+            editorView.classList.add('visible');
+            window.scrollTo(0, 0);
+            edTitle.focus();
+        }
+
+        function closeEditor() {
+            editorView.classList.remove('visible');
+            listView.classList.remove('hidden');
+            editingId = null;
+        }
+
+        function saveEntry() {
+            var isEdit = !!editingId;
+            var ts = nowIso();
+            var entry;
+            if (editingId) {
+                var orig = null;
+                for (var i = 0; i < allEntries.length; i++) {
+                    if (allEntries[i].id === editingId) { orig = allEntries[i]; break; }
+                }
+                entry = {
+                    id: editingId,
+                    title: edTitle.value.trim() || 'Untitled',
+                    body: edBody.value,
+                    tags: parseTags(edTags.value),
+                    created: (orig && orig.created) || ts,
+                    updated: ts,
+                    source: (orig && orig.source) || 'local'
+                };
+            } else {
+                entry = {
+                    id: 'local-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
+                    title: edTitle.value.trim() || 'Untitled',
+                    body: edBody.value,
+                    tags: parseTags(edTags.value),
+                    created: ts,
+                    updated: ts,
+                    source: 'local'
+                };
+            }
+
+            var local = loadStore();
+            var i2 = -1;
+            for (var j = 0; j < local.length; j++) {
+                if (local[j].id === entry.id) { i2 = j; break; }
+            }
+            if (i2 >= 0) local[i2] = entry; else local.push(entry);
+            saveStore(local);
+
+            // If this was a seed entry the user deleted before, un-hide it.
+            var hidden = loadHidden().filter(function (id) { return id !== entry.id; });
+            saveHidden(hidden);
+
+            closeEditor();
+            renderAll();
+            toast(storageOk ? (isEdit ? 'Entry updated' : 'Entry created') : 'Saved for this session only');
+        }
+
+        function deleteEntry(id) {
+            var entry = null;
+            for (var i = 0; i < allEntries.length; i++) {
+                if (allEntries[i].id === id) { entry = allEntries[i]; break; }
+            }
+            if (!entry) return;
+            var title = entry.title === 'Untitled' ? 'this untitled entry' : '“' + entry.title + '”';
+            if (!window.confirm('Delete ' + title + '?')) return;
+
+            saveStore(loadStore().filter(function (e) { return e.id !== id; }));
+            // Record the deletion so a same-id seed entry (if any) stays hidden.
+            var hidden = loadHidden();
+            if (hidden.indexOf(id) === -1) { hidden.push(id); saveHidden(hidden); }
+
+            renderAll();
+            toast('Entry deleted');
+        }
+
+        // ── Export / Import ──
+        function exportContent() {
+            var payload = {
+                v: 1,
+                exported: nowIso(),
+                hidden: loadHidden(),
+                entries: allEntries
+            };
+            var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            var d = new Date();
+            var stamp = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+            a.download = 'tdaco-admin-content-' + stamp + '.json';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+            toast('Exported ' + allEntries.length + ' entr' + (allEntries.length === 1 ? 'y' : 'ies'));
+        }
+
+        function importContent(file) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                try {
+                    var data = JSON.parse(reader.result);
+                    if (!data || !Array.isArray(data.entries)) throw new Error('bad shape');
+                    var local = loadStore();
+                    var byId = {};
+                    local.forEach(function (e) { byId[e.id] = e; });
+                    var count = 0;
+                    data.entries.forEach(function (e) {
+                        var ne = normalizeImported(e);
+                        byId[ne.id] = ne;
+                        count++;
+                    });
+                    saveStore(Object.keys(byId).map(function (k) { return byId[k]; }));
+                    if (Array.isArray(data.hidden)) saveHidden(data.hidden);
+                    renderAll();
+                    toast('Imported ' + count + ' entr' + (count === 1 ? 'y' : 'ies'));
+                } catch (err) {
+                    toast('Import failed — not a valid content file');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // ── Views ──
+        function showAdmin(content) {
+            seedEntries = (content.entries || []).map(normalizeSeed);
+            lockView.style.display = 'none';
+            adminView.classList.add('visible');
+            activeTag = null;
+            searchInput.value = '';
+            closeEditor();
+            renderAll();
+            window.scrollTo(0, 0);
+        }
+
+        function showLock(message) {
+            adminView.classList.remove('visible');
+            lockView.style.display = 'flex';
+            lockError.textContent = message || '';
+            pwInput.value = '';
+            pwInput.focus();
+        }
+
+        // ── Unlock flow ──
+        // 1. Try the session key first (refresh without re-typing).
+        //    If it fails (e.g. content was re-encrypted under a new password),
+        //    discard the stale key and fall through to the typed password.
+        // 2. Try the typed password, if any.
+        function unlock() {
+            if (!window.crypto || !crypto.subtle) {
+                lockError.textContent = 'Your browser does not support secure crypto. Use HTTPS.';
+                return Promise.resolve();
+            }
+
+            var typed = pwInput.value;
+
+            var storedAttempt = importStoredKey()
+                .catch(function () { return null; })
+                .then(function (storedKey) {
+                    if (!storedKey) return null;
+                    return decryptWith(storedKey).then(function (content) {
+                        return { content: content };
+                    }, function () {
+                        sessionStorage.removeItem(SESSION_KEY); // stale key — discard
+                        return null;
+                    });
+                });
+
+            return storedAttempt
+                .then(function (result) {
+                    if (result) { showAdmin(result.content); return null; }
+                    if (!typed) return { silent: true };   // initial load, nothing typed
+                    return deriveKey(typed)
+                        .then(function (key) {
+                            return decryptWith(key).then(function (content) {
+                                // Remembering the key is a convenience — a storage hiccup
+                                // must not block an unlock that has already succeeded.
+                                return storeKey(key).catch(function () { }).then(function () {
+                                    return { content: content };
+                                });
+                            });
+                        });
+                })
+                .then(function (result) {
+                    if (result && result.content) { showAdmin(result.content); return null; }
+                    if (result && result.silent) return null;
+                    // A password was typed but decryption failed.
+                    lockError.textContent = 'Incorrect password.';
+                    pwInput.select();
+                    return null;
+                })
+                .catch(function () {
+                    sessionStorage.removeItem(SESSION_KEY);
+                    lockError.textContent = typed ? 'Incorrect password.' : 'Could not load the admin content.';
+                    if (typed) pwInput.select();
+                    return null;
+                });
+        }
+
+        // ── Events ──
+        form.addEventListener('submit', function (ev) {
+            ev.preventDefault();
+            lockError.textContent = '';
+            unlockBtn.disabled = true;
+            unlockBtn.textContent = 'Unlocking…';
+            setTimeout(function () {
+                unlock().then(function () {
+                    unlockBtn.disabled = false;
+                    unlockBtn.textContent = 'Unlock';
+                });
+            }, 50);
+        });
+
+        lockBtn.addEventListener('click', function () {
+            sessionStorage.removeItem(SESSION_KEY);
+            location.reload();
+        });
+
+        searchInput.addEventListener('input', renderList);
+
+        filterClear.addEventListener('click', function () {
+            activeTag = null;
+            renderList();
+        });
+
+        newEntryBtn.addEventListener('click', function () { openEditor(null); });
+
+        exportBtn.addEventListener('click', exportContent);
+
+        importBtn.addEventListener('click', function () { importFile.click(); });
+
+        importFile.addEventListener('change', function () {
+            if (importFile.files && importFile.files[0]) {
+                if (window.confirm('Import will merge the file’s entries with what’s on this device (same ids are replaced). Continue?')) {
+                    importContent(importFile.files[0]);
+                }
+                importFile.value = '';
+            }
+        });
+
+        // Delegated card actions (edit / delete / tag filter)
+        entriesContainer.addEventListener('click', function (ev) {
+            var t = ev.target;
+            while (t && t !== entriesContainer) {
+                if (t.classList && t.classList.contains('tag')) {
+                    var tag = t.getAttribute('data-tag');
+                    activeTag = (activeTag === tag) ? null : tag;
+                    renderList();
+                    return;
+                }
+                if (t.getAttribute && t.getAttribute('data-action') === 'edit') {
+                    openEditor(t.getAttribute('data-id'));
+                    return;
+                }
+                if (t.getAttribute && t.getAttribute('data-action') === 'delete') {
+                    deleteEntry(t.getAttribute('data-id'));
+                    return;
+                }
+                t = t.parentNode;
+            }
+        });
+
+        saveEntryBtn.addEventListener('click', saveEntry);
+        cancelEntryBtn.addEventListener('click', closeEditor);
+        editorBack.addEventListener('click', function (ev) { ev.preventDefault(); closeEditor(); });
+
+        // Ctrl/Cmd+S saves in the editor
+        document.addEventListener('keydown', function (ev) {
+            if ((ev.metaKey || ev.ctrlKey) && ev.key === 's' && editorView.classList.contains('visible')) {
+                ev.preventDefault();
+                saveEntry();
+            }
+        });
+
+        unlock();
+    })();
+    </script>
+</body>
+</html>
